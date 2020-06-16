@@ -30,7 +30,7 @@ const scrape = async (searchqueries) => {
   });
   console.log(brandLinksFiltered);
 
-  // --------------------------------------------------------
+  // ------------------NEW ITERATED SEARCH----------------
   // -- Brand Iteration --
 
   //  ++ To_do ++
@@ -45,21 +45,50 @@ const scrape = async (searchqueries) => {
   //   ], ...[]
   // ]
 
-  console.log('going to ' + `${url}${brandLinksFiltered[0]}`);
-  await page.goto(`${url}${brandLinksFiltered[0]}`);
+  for await(const brandLink of brandLinksFiltered) {
+    console.log('going to ' + `${url}${brandLink}`);
+    await page.goto(`${url}${brandLink}`);
 
-  // delete unnecessary items
-  const [un] = await page.$x('//*[@id="content_wrap"]/div[12]/div/div');
-  await un.evaluateHandle((el) => el.remove(0));
+    // delete unnecessary items
+    await page.$eval('.cat_list.subcatlist.carousel_list.cf', el => el.remove());
 
-  // all racketsitelinks and racketnames
-  const allRacketLinks = await page.$$eval('a.name', (el) => el.map((el) => el.getAttribute('href'))
-    .filter((el) => !el.includes('Junior'))
-    .filter((el) => !el.includes('2-Pack'))
-  );
+    // const [un] = await page.$x('//*[@id="content_wrap"]/div[12]/div/div');
+    // if (un) {
+    //   await un.evaluateHandle((el) => el.remove(0));
+    // }
 
-  // Get racket data and store it
-  const racketsData = await DataFetcher.scrapeData(browser, page, allRacketLinks, brandLinksFiltered);
+    // all racketsitelinks and racketnames
+    const allRacketLinks = await page.$$eval('a.name', (el) => el.map((el) => el.getAttribute('href'))
+      .filter((el) => !el.includes('Junior'))
+      .filter((el) => !el.includes('2-Pack'))
+    );
+
+    // Get racket data and store it
+    const racketsData = await DataFetcher.scrapeData(browser, page, allRacketLinks, brandLinksFiltered);
+    console.log(racketsData);
+  }
+
+
+
+
+  
+  // ----------------OLD SEARCH ON BRANDSITE-------------------
+  
+  // console.log('going to ' + `${url}${brandLinksFiltered[0]}`);
+  // await page.goto(`${url}${brandLinksFiltered[0]}`);
+
+  // // delete unnecessary items
+  // const [un] = await page.$x('//*[@id="content_wrap"]/div[12]/div/div');
+  // await un.evaluateHandle((el) => el.remove(0));
+
+  // // all racketsitelinks and racketnames
+  // const allRacketLinks = await page.$$eval('a.name', (el) => el.map((el) => el.getAttribute('href'))
+  //   .filter((el) => !el.includes('Junior'))
+  //   .filter((el) => !el.includes('2-Pack'))
+  // );
+
+  // // Get racket data and store it
+  // const racketsData = await DataFetcher.scrapeData(browser, page, allRacketLinks, brandLinksFiltered);
   
   // --------------------------------------------------------
 
