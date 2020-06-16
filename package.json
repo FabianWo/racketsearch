@@ -1,0 +1,17 @@
+{
+  "name": "instascrape",
+  "version": "1.0.0",
+  "description": "Simple Instagram image scraper",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./app.js"
+  },
+  "author": "Fabian Wollmer",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pug": "^3.0.0",
+    "puppeteer": "^3.1.0"
+  }
+}

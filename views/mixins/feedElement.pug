@@ -1,0 +1,13 @@
+mixin feedElement(data = {}, i)
+  .feed-element
+    h3.racketName= data[i].racketName
+    img.racketPicture(src=`${data[i].racketPictureLink}`)
+    .specsContainer
+      if data[i].racketSpecs === "no specs available"
+        .specText
+          span.racketSpec no specs available
+      else
+        each val, key in data[i].racketSpecs
+          .specText
+            span.racketSpec= key
+            span.racketSpec= val
