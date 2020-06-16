@@ -45,17 +45,14 @@ const scrape = async (searchqueries) => {
   //   ], ...[]
   // ]
 
+  const data = [];
+
   for await(const brandLink of brandLinksFiltered) {
     console.log('going to ' + `${url}${brandLink}`);
     await page.goto(`${url}${brandLink}`);
 
     // delete unnecessary items
     await page.$eval('.cat_list.subcatlist.carousel_list.cf', el => el.remove());
-
-    // const [un] = await page.$x('//*[@id="content_wrap"]/div[12]/div/div');
-    // if (un) {
-    //   await un.evaluateHandle((el) => el.remove(0));
-    // }
 
     // all racketsitelinks and racketnames
     const allRacketLinks = await page.$$eval('a.name', (el) => el.map((el) => el.getAttribute('href'))
@@ -64,8 +61,9 @@ const scrape = async (searchqueries) => {
     );
 
     // Get racket data and store it
-    const racketsData = await DataFetcher.scrapeData(browser, page, allRacketLinks, brandLinksFiltered);
-    console.log(racketsData);
+    const racketData = await DataFetcher.scrapeData(browser, page, allRacketLinks, brandLinksFiltered);
+    // console.log(racketData);
+    data.push(racketData)
   }
 
 
@@ -88,13 +86,13 @@ const scrape = async (searchqueries) => {
   // );
 
   // // Get racket data and store it
-  // const racketsData = await DataFetcher.scrapeData(browser, page, allRacketLinks, brandLinksFiltered);
+  // const racketData = await DataFetcher.scrapeData(browser, page, allRacketLinks, brandLinksFiltered);
   
   // --------------------------------------------------------
 
 
-  // console.log(racketsData);
-  return racketsData;
+  console.log(data);
+  return data;
 
 
   // setTimeout(async () => {

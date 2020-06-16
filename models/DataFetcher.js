@@ -1,6 +1,6 @@
 const scraper = require('puppeteer');
 
-exports.scrapeData = async (browser, page, allRacketLinks, brandLinksFiltered) => {
+exports.scrapeData = async (browser, page, allRacketLinks) => {
   // junior exclusion maybe
   const allRacketNames = await (await page.$$eval('a.name', (el) => el.map((el) => el.innerHTML)
     .filter((el) => !el.includes('Junior'))
