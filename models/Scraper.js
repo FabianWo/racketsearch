@@ -1,5 +1,8 @@
 const scraper = require('puppeteer');
 const DataFetcher = require('./DataFetcher');
+// const schema = require('./DbSchema');
+
+
 require('events').EventEmitter.defaultMaxListeners = Infinity;
 
 const scrape = async (searchqueries) => {
@@ -11,7 +14,6 @@ const scrape = async (searchqueries) => {
   const browser = await scraper.launch({headless: false});
   const page = await browser.newPage();
   const url = "https://www.tennis-warehouse.com";
-  // console.log('going to ' + url);
   await page.goto(url);
 
   // --------------------------------------------------------
@@ -30,20 +32,8 @@ const scrape = async (searchqueries) => {
   });
   console.log(brandLinksFiltered);
 
-  // ------------------NEW ITERATED SEARCH----------------
-  // -- Brand Iteration --
-
-  //  ++ To_do ++
-
-  //  [
-  //   BabolatData[
-  //     {
-  //       racketName: ..,
-  //       racketPicturelink: ...,
-  //       racketspecs: ...,
-  //     }, ...
-  //   ], ...[]
-  // ]
+  // --------------------------------------------------------
+  // --NEW ITERATED SEARCH--
 
   const data = [];
 
@@ -66,9 +56,6 @@ const scrape = async (searchqueries) => {
     data.push(racketData)
   }
 
-
-
-
   
   // ----------------OLD SEARCH ON BRANDSITE-------------------
   
@@ -89,16 +76,17 @@ const scrape = async (searchqueries) => {
   // const racketData = await DataFetcher.scrapeData(browser, page, allRacketLinks, brandLinksFiltered);
   
   // --------------------------------------------------------
-
-
-  console.log(data);
-  return data;
-
-
-  // setTimeout(async () => {
+  
+  setTimeout(async () => {
     
-  //   await browser.close();
-  // }, 5000);
+    await browser.close();
+  }, 2000);
+  // console.log(`allracketnames 
+  // ${JSON.stringify(data, null, '  ')}`)
+
+
+  // -- DATABASE STORAGE --
+  return data;
 };
 
 module.exports = scrape;

@@ -17,8 +17,9 @@ html(lang='en')
 
       if data !== undefined
         .feed-container
-          each val, index in data
-            +feedElement(data, index)
+          each brand in data
+            each val, index in brand
+              +feedElement(brand, index)
 
       //- .feed-container
       //-   .feed-element

@@ -62,10 +62,10 @@ exports.scrapeData = async (browser, page, allRacketLinks) => {
   // ${JSON.stringify(allRacketDataByBrand, null, '  ')}
   // `)
   // ----------------------------------------------------------
-  setTimeout(async () => {
+  // setTimeout(async () => {
     
-    await browser.close();
-  }, 5000);
+  //   await browser.close();
+  // }, 2000);
 
   return allRacketDataByBrand;
 
