@@ -1,6 +1,8 @@
 const scraper = require('puppeteer');
 const DataFetcher = require('./DataFetcher');
-// const schema = require('./DbSchema');
+const racketSchema = require('./DbSchema');
+console.log(racketSchema);
+
 
 
 require('events').EventEmitter.defaultMaxListeners = Infinity;
@@ -81,8 +83,8 @@ const scrape = async (searchqueries) => {
     
     await browser.close();
   }, 2000);
-  // console.log(`allracketnames 
-  // ${JSON.stringify(data, null, '  ')}`)
+  console.log(`allracketnames 
+  ${JSON.stringify(data, null, '  ')}`)
 
 
   // -- DATABASE STORAGE --

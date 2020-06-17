@@ -16,6 +16,6 @@ exports.redirect = (req, res) => {
 exports.displayScrapeData = async (req, res) => {
   console.log("Scraping data for " + req.params.searchqueries);
   const data = await scrapeData(req.params.searchqueries);
-  console.log(data);
+  // console.log(data);
   res.render('index', {data});
 }
