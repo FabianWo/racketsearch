@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP');
+
 * {
   margin: 0;
 }
+
 body {
   box-sizing: border-box;
   background-color: rgb(28, 35, 44);
@@ -123,6 +125,11 @@ button:active {
 
 .specText:nth-child(2n) {
   color: rgb(180, 180, 180);
+}
+
+.racketSpec:nth-child(2n-1) {
+  white-space: nowrap;
+  margin-right: 1rem;
 }
 
 .racketSpec:nth-child(2n) {

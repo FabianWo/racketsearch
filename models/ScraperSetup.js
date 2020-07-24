@@ -1,13 +1,9 @@
 const scraper = require('puppeteer');
 const DataFetcher = require('./DataFetcher');
-const racketSchema = require('./DbSchema');
-console.log(racketSchema);
-
-
-
 require('events').EventEmitter.defaultMaxListeners = Infinity;
 
 const scrape = async (searchqueries) => {
+
   // --------------------------------------------------------
   // -- Scraper/Puppeteer Setup --
   searchqueries = searchqueries.split(" ");
@@ -52,42 +48,30 @@ const scrape = async (searchqueries) => {
       .filter((el) => !el.includes('2-Pack'))
     );
 
+    // export brandname for dynamic Schema/DB saving
+    const brandName = brandLink.replace('racquets.html', '').slice(1);
+    module.exports.brandName = brandName;
+    
     // Get racket data and store it
-    const racketData = await DataFetcher.scrapeData(browser, page, allRacketLinks, brandLinksFiltered);
+    const racketData = await DataFetcher.scrapeData(browser, page, allRacketLinks, brandName);
     // console.log(racketData);
-    data.push(racketData)
+
+    // reset brandname for schema 
+    module.exports.brandName = undefined;
+    
+    data.push(racketData);
   }
 
-  
-  // ----------------OLD SEARCH ON BRANDSITE-------------------
-  
-  // console.log('going to ' + `${url}${brandLinksFiltered[0]}`);
-  // await page.goto(`${url}${brandLinksFiltered[0]}`);
-
-  // // delete unnecessary items
-  // const [un] = await page.$x('//*[@id="content_wrap"]/div[12]/div/div');
-  // await un.evaluateHandle((el) => el.remove(0));
-
-  // // all racketsitelinks and racketnames
-  // const allRacketLinks = await page.$$eval('a.name', (el) => el.map((el) => el.getAttribute('href'))
-  //   .filter((el) => !el.includes('Junior'))
-  //   .filter((el) => !el.includes('2-Pack'))
-  // );
-
-  // // Get racket data and store it
-  // const racketData = await DataFetcher.scrapeData(browser, page, allRacketLinks, brandLinksFiltered);
-  
   // --------------------------------------------------------
   
   setTimeout(async () => {
     
     await browser.close();
   }, 2000);
-  console.log(`allracketnames 
-  ${JSON.stringify(data, null, '  ')}`)
 
+  // console.log(`allracketnames 
+  // ${JSON.stringify(data, null, '  ')}`)
 
-  // -- DATABASE STORAGE --
   return data;
 };
 

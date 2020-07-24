@@ -3,9 +3,9 @@ mixin feedElement(data = {}, i)
     h3.racketName= data[i].racketName
     img.racketPicture(src=`${data[i].racketPictureLink}`)
     .specsContainer
-      if data[i].racketSpecs === "no specs available"
+      if data[i].racketSpecs === "Not available"
         .specText
-          span.racketSpec no specs available
+          span.racketSpec Not available
       else
         each val, key in data[i].racketSpecs
           .specText
