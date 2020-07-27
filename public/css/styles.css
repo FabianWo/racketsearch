@@ -93,6 +93,9 @@ button:active {
   padding: 0 1.5rem;
   padding-bottom: 30px;
   column-gap: 1rem;
+
+  flex: 1 0 auto;
+  min-width: 450px;
 }
 
 .racketName {

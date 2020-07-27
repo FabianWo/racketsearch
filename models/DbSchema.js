@@ -1,5 +1,5 @@
 // delete require.cache[require.resolve('./Scraper')];
-delete require.cache[require.resolve('./ScraperSetup').brandName];
+// delete require.cache[require.resolve('./ScraperSetup').brandName];
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -27,9 +27,9 @@ const racketSchema = new Schema({
 });
 
 // clear cache and get correct name for collection
-const exportModel = () => {
-  delete require.cache[require.resolve('./ScraperSetup').brandName];
-  let brandname = require('./ScraperSetup').brandName;
+const exportModel = (modelBrandName) => {
+  delete require.cache[require.resolve(`${modelBrandName}`).brandName];
+  let brandname = require(`${modelBrandName}`).brandName;
   return mongoose.model(brandname, racketSchema);
 };
 

@@ -6,7 +6,7 @@ const scrape = async (searchqueries) => {
 
   // --------------------------------------------------------
   // -- Scraper/Puppeteer Setup --
-  searchqueries = searchqueries.split(" ");
+  searchqueries = searchqueries.split(" ").filter((query) => query !== '**scrape**');
   console.log(searchqueries);
 
   const browser = await scraper.launch({headless: false});

@@ -11,14 +11,14 @@ exports.scrapeData = async (browser, page, allRacketLinks, brandName) => {
   ));
   
   // wenn document nicht in allracketnames enthalten ist, löschen oder als veraltet klassifizieren
-  const RacketSchema = require('./DbSchema')();
-  const updateRacketList = await RacketSchema.find();
+  const RacketModel = require('./DbSchema')('./ScraperSetup');
+  const updateRacketList = await RacketModel.find();
   updateRacketList.forEach( async (racket) => {
     console.log(racket.racketName);
     // console.log(!allRacketNames.includes(racket.racketName));
     if (!allRacketNames.includes(racket.racketName)) {
       console.log('update');
-      await RacketSchema.updateOne({'racketName': racket.racketName}, {'veraltet': true});
+      await RacketModel.updateOne({'racketName': racket.racketName}, {'veraltet': true});
     }
   });  
   
@@ -55,12 +55,13 @@ exports.scrapeData = async (browser, page, allRacketLinks, brandName) => {
     index++;
 
     // store data
-    const RacketSchema = require('./DbSchema')();
-    const saveRacket = new RacketSchema({racketName, racketPictureLink, racketSpecs});
+    const RacketModel = require('./DbSchema')('./ScraperSetup');
+    const saveRacket = new RacketModel({racketName, racketPictureLink, racketSpecs});
 
-    // dann für jeden racket findoneandupdate(), wenn nichts gefunden await save
+    // dann für jeden racket findOneAndUpdate(), wenn nichts gefunden await save
     
-    RacketSchema.findOneAndUpdate({racketName: `${saveRacket.racketName}`}, {
+    RacketModel.findOneAndUpdate({racketName: `${saveRacket.racketName}`},
+    {
       'racketPictureLink': saveRacket.racketPictureLink,
       'racketSpecs': saveRacket.racketSpecs
     },
@@ -85,7 +86,7 @@ exports.scrapeData = async (browser, page, allRacketLinks, brandName) => {
 
   // console.log(`allracketnames 
   // ${JSON.stringify(allRacketDataByBrand, null, '  ')}
-  // `)
+  // `);
   // ----------------------------------------------------------
 
   // setTimeout(async () => {
