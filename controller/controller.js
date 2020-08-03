@@ -1,6 +1,6 @@
 const express = require('express');
 const startScraper = require('../models/ScraperSetup');
-const displayData = require('../models/DisplayData')
+const displayData = require('../models/DisplayData');
 const mongoose = require('mongoose');
 
 exports.home = (req, res) => {
@@ -9,30 +9,35 @@ exports.home = (req, res) => {
 };
 
 exports.redirect = (req, res) => {
-  const searchqueries = req.body.searchqueries;
-  if (searchqueries.includes('**scrape**')) {
-    res.redirect(`/search/scrape/${searchqueries}`);
+  let searchqueries = req.body.searchqueries;
+  if (searchqueries === '') {
+    res.render('index', {data: false});
+  } else if (searchqueries.includes('**scrape**')) {
+    res.redirect(`/scrape/${searchqueries}`);
+  } else if (searchqueries) {
+    res.redirect(`/search/${searchqueries}`);
   }
   // searchqueries filtern, keine sonderzeichen erlauben
-  if (searchqueries) {
-    res.redirect(`/search/${searchqueries}`);
-  } else {
-    res.redirect(`/`);
-  }
 };
 
-exports.displayScrapeData = async (req, res) => {  
-  console.log('running displayData');
-  const data = await displayData(req.params.searchqueries);
-  // console.log(JSON.stringify(data, null, '  '));
+exports.displayScrapeData = async (req, res) => {
+  let searchqueries = req.params.searchqueries.split(' ')
+    .filter(el => el !== '**scrape**').join(' ');
+  console.log('running displayScrapeData');
   
-  res.render('index', {data});
+  const data = await displayData(searchqueries);
+  if (data.length === 0) {
+    res.render('index', {data: false});
+  } else {
+    res.render('index', {data});
+  }
 };
 
 exports.getScrapeData = async (req, res) => {
-  console.log("Scraping data for " + req.params.searchqueries);
-  const data = await startScraper(req.params.searchqueries);
-  // console.log(data);
-  // const saveData = await (new RacketSchema(req.body)).save();
-  // console.log('data saved');
+  let searchqueries = req.params.searchqueries.split(' ')
+    .filter(el => el !== '**scrape**');
+
+  console.log("Scraping data for " + searchqueries);
+  const data = await startScraper(searchqueries);
+  res.redirect(`/search/${searchqueries}`);
 };

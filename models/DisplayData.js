@@ -6,7 +6,6 @@ const displayData = async (searchqueries) => {
 
   // make searchquery array, exclude scrape statement
   searchqueries = searchqueries.split(" ")
-    .filter((query) => query !== '**scrape**')
     .map((el) => el.toLowerCase());
 
   // filter brands against queries 
@@ -26,11 +25,10 @@ const displayData = async (searchqueries) => {
       if (err) { console.error(err); }
     });
 
-    data.push(readRackets);    
+    data.push(readRackets);
   }
-  
-  return data;
 
+  return data;
 };
 
 module.exports = displayData;

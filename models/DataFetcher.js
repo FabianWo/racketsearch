@@ -1,6 +1,5 @@
 const scraper = require('puppeteer');
 const mongoose = require('mongoose');
-// const e = require('express');
 
 exports.scrapeData = async (browser, page, allRacketLinks, brandName) => {
 
@@ -14,10 +13,8 @@ exports.scrapeData = async (browser, page, allRacketLinks, brandName) => {
   const RacketModel = require('./DbSchema')('./ScraperSetup');
   const updateRacketList = await RacketModel.find();
   updateRacketList.forEach( async (racket) => {
-    console.log(racket.racketName);
-    // console.log(!allRacketNames.includes(racket.racketName));
     if (!allRacketNames.includes(racket.racketName)) {
-      console.log('update');
+      console.log('update ' + racket.racketName);
       await RacketModel.updateOne({'racketName': racket.racketName}, {'veraltet': true});
     }
   });  
@@ -25,12 +22,14 @@ exports.scrapeData = async (browser, page, allRacketLinks, brandName) => {
   //--------------------SCRAPE RACKETS, STORE IN DB------------------
 
   // helpers for loop and final data
-  const allRacketDataByBrand = [];
+  // const allRacketDataByBrand = [];
   let index = 0;
 
   // single Racket scrape, and data storage
   for await (const link of allRacketLinks) {
     await page.goto(link);
+
+    // -----------GET DATA------------
 
     // get racketname from given List
     const racketName = allRacketNames[index];      
@@ -48,13 +47,15 @@ exports.scrapeData = async (browser, page, allRacketLinks, brandName) => {
         finalSpecs[txtSplit[0]] = txtSplit[1];
       });
       return finalSpecs;
-    }).catch((err) => console.log(err));
+    }).catch( err => console.log(err));
+
     if (racketSpecs === undefined) {
       racketSpecs = 'no specs available';
     }
     index++;
 
-    // store data
+    // -----------STORE DATA------------
+
     const RacketModel = require('./DbSchema')('./ScraperSetup');
     const saveRacket = new RacketModel({racketName, racketPictureLink, racketSpecs});
 
@@ -66,22 +67,16 @@ exports.scrapeData = async (browser, page, allRacketLinks, brandName) => {
       'racketSpecs': saveRacket.racketSpecs
     },
     {new: true},
-    async (err, doc) => {
+    async (err) => {
       if (err) {
         console.error(err);
-      } else if (doc) {
-        // console.log('updated ' + doc);
-        // console.log('updatedPIC ' + doc.racketPictureLink);
       } else {
         await saveRacket.save( (err, saveRacket) => {
           if (err) return err;
           console.log(`succesfully saved ${saveRacket.racketName}`);
         });
-
       }
     });
-
-    allRacketDataByBrand.push({racketName, racketPictureLink, racketSpecs});
   }
 
   // console.log(`allracketnames 
@@ -93,7 +88,4 @@ exports.scrapeData = async (browser, page, allRacketLinks, brandName) => {
     
     //   await browser.close();
     // }, 2000);
-  
-
-  return allRacketDataByBrand;
 };

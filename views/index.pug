@@ -6,35 +6,50 @@ html(lang='en')
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet', type="text/css", href='/css/styles.css')
+    script(defer src="/js/script.js")
     title Document
   body
     .container
+      nav.nav
+        ul.nav__list
+          a.nav__link(href="/")
+            li.nav__element Start
+          a.nav__link(href="")
+            li.nav__element Rackets
+          a.nav__link(href="")
+            li.nav__element Kontakt
+          a.nav__link(href="")
+            li.nav__element Anmelden
       form.form(action=`/search/` method='POST')
-        label.description(for='searchqueries') Type in a racket brand/name
-        .input-submit
-          input(type='text', name="searchqueries", id='searchqueries', placeholder='search..')
-          button(type='submit') Find rackets!
+        label.form__description(for='searchqueries') Type in a racket brand/name
+        .form__submit
+          input.form__input(type='text', name="searchqueries", id='searchqueries', placeholder='Search..')
+          button.form__button(type='submit') Find rackets!
 
-      if data !== undefined
-        .feed-container
+      if status === 404
+        .feed
+          .feed__error
+            h1 404
+            span.feed__error-message Page not found / not available anymore !!
+            span.feed__error-message Maybe this page doesn't exist anymore due to changes on our site. 
+            span.feed__error-message It might also be due to an error in your link
+            span.feed__error-message Or... the page never existed in the first place :)
+      if data === false
+        span.search-result-text Found 0 rackets
+        .feed
+          .feed__error
+            //- span.feed__error-message No rackets found !!
+            span.feed__error-message The search is case sensitive, which means you need to type in the brand correctly, snippets of the word don't work !
+            span.feed__error-message Here are some suggested searches:
+            span.feed__error-message
+              a.form__button.form__button--error(href="/search/babolat") Babolatrackets
+              a.form__button.form__button--error(href="/search/Wilson") Wilsonrackets
+              a.form__button.form__button--error(href="/search/Yonex") Yonexrackets
+              a.form__button.form__button--error(href="/search/Head") Headrackets
+      else if data
+        span.search-result-text Found #{data[0].length} rackets
+        .feed
           each brand in data
             each val, index in brand
               +feedElement(brand, index)
 
-      //- .feed-container
-      //-   .feed-element
-      //-     img(src='', alt='', data-id='1')
-      //-   .feed-element
-      //-     img(src='', alt='', data-id='1')
-      //-   .feed-element
-      //-     img(src='', alt='', data-id='1')
-      //-   .feed-element
-      //-     img(src='', alt='', data-id='1')
-      //-   .feed-element
-      //-     img(src='', alt='', data-id='1')
-      //-   .feed-element
-      //-     img(src='', alt='', data-id='1')
-      //-   .feed-element
-      //-     img(src='', alt='', data-id='1')
-      //-   .feed-element
-      //-     img(src='', alt='', data-id='1')

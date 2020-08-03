@@ -4,18 +4,15 @@ require('events').EventEmitter.defaultMaxListeners = Infinity;
 
 const scrape = async (searchqueries) => {
 
-  // --------------------------------------------------------
-  // -- Scraper/Puppeteer Setup --
-  searchqueries = searchqueries.split(" ").filter((query) => query !== '**scrape**');
+  // ---------------- Scraper/Puppeteer Setup ------------------
+  // searchqueries = searchqueries.split(" ");
+  // .filter((query) => query !== '**scrape**');
   console.log(searchqueries);
 
   const browser = await scraper.launch({headless: false});
   const page = await browser.newPage();
   const url = "https://www.tennis-warehouse.com";
   await page.goto(url);
-
-  // --------------------------------------------------------
-  // -- SETUP --
 
   // pull out brand names/links to sites
   const [brandListOneHandle] = await page.$x('//*[@id="lnav"]/div[4]/div[1]/ul');
@@ -30,10 +27,9 @@ const scrape = async (searchqueries) => {
   });
   console.log(brandLinksFiltered);
 
-  // --------------------------------------------------------
-  // --NEW ITERATED SEARCH--
+  // ---------------------Scrape Loop---------------------------
 
-  const data = [];
+  // const data = [];
 
   for await(const brandLink of brandLinksFiltered) {
     console.log('going to ' + `${url}${brandLink}`);
@@ -52,14 +48,11 @@ const scrape = async (searchqueries) => {
     const brandName = brandLink.replace('racquets.html', '').slice(1);
     module.exports.brandName = brandName;
     
-    // Get racket data and store it
+    // Scrape racketbrand
     const racketData = await DataFetcher.scrapeData(browser, page, allRacketLinks, brandName);
-    // console.log(racketData);
 
     // reset brandname for schema 
     module.exports.brandName = undefined;
-    
-    data.push(racketData);
   }
 
   // --------------------------------------------------------
@@ -71,8 +64,6 @@ const scrape = async (searchqueries) => {
 
   // console.log(`allracketnames 
   // ${JSON.stringify(data, null, '  ')}`)
-
-  return data;
 };
 
 module.exports = scrape;
