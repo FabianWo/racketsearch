@@ -21,7 +21,8 @@
   border: none;
   text-decoration: none;
   /* filter: invert(0.2); */
-  letter-spacing: 0.1px;
+  /* letter-spacing: 0.2px; */
+  line-height: 1.5rem !important;
 }
 
 input:focus, button:focus {
@@ -36,9 +37,9 @@ body {
   justify-content: center;
 }
 
-/* #noTransitionsOnLoad {
+#noTransitionsOnLoad {
   transition: none !important;
-} */
+}
 
 .container {
   width: 80%;
@@ -47,6 +48,33 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+/* ------------------FLASHES------------------------ */
+
+.flash-messages {
+  position: absolute;
+  margin: 0.5rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: var(--color-darkblue); */
+  border-radius: 4px;
+  top: 20px;
+
+  transition: opacity 0.3s ease-out;
+}
+
+.flash {
+  color: white;
+  text-align: center;
+}
+.flash__success {
+  color: rgb(85, 211, 106);
+}
+.flash__error {
+  color: rgb(187, 70, 70);
+}
+
 
 /* --------------------------scrape form-------------------------- */
 .nav {
@@ -92,11 +120,11 @@ body {
 }
 
 .nav__element:hover {
-  padding: 2rem 1.4rem;
+  padding: 1.9rem 1.4rem;
 }
 
 .nav__element--open {
-  padding: 2rem 1.4rem;
+  padding: 1.9rem 1.4rem;
 }
 
 
@@ -117,9 +145,10 @@ body {
 .form__login {
   justify-self: center;
   margin: 0;
-  padding: 0 2rem 2rem;
+  padding: 2rem;
   width: 50%;
   align-items: center;
+  box-shadow: none;
 }
 
 .form__login-container {

@@ -1,6 +1,14 @@
-mixin login(data = {}, i)
+extends index
+
+block dynamicContent
   .feed
     form.form.form__login(action=`/login` method='POST')
+      if locals.flashes.authSuccess
+        .flash-messages
+          span.flash.flash__success #{flashes.authSuccess[0]}
+      else if locals.flashes.authError
+        .flash-messages
+          span.flash.flash__error #{flashes.authError[0]}
       h1 Login
       .form__login-container
         label.form__description.form__login-description(for='username') Username

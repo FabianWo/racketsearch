@@ -1,9 +1,5 @@
 doctype html
 include mixins/feedElement
-include mixins/zeroSearchResults
-include mixins/login
-include mixins/register
-include mixins/error
 
 html(lang='en')
   head
@@ -17,34 +13,28 @@ html(lang='en')
     .container
       nav.nav
         ul.nav__list
-          a.nav__link(href="/")
-            li.nav__element Start
-          a.nav__link(href="/")
-            li.nav__element Rackets
-          a.nav__link(href="/")
-            li.nav__element Kontakt
-          a.nav__link(href="/register")
-            li.nav__element Registrieren
-          a.nav__link(href="/login")
-            li.nav__element Anmelden
+          a.nav__link#noTransitionsOnLoad(href="/")
+            li.nav__element#noTransitionsOnLoad Start
+          a.nav__link#noTransitionsOnLoad(href="/")
+            li.nav__element#noTransitionsOnLoad Rackets
+          a.nav__link#noTransitionsOnLoad(href="/")
+            li.nav__element#noTransitionsOnLoad Kontakt
+          a.nav__link#noTransitionsOnLoad(href="/register")
+            li.nav__element#noTransitionsOnLoad Registrieren
+          a.nav__link#noTransitionsOnLoad(href="/login")
+            li.nav__element#noTransitionsOnLoad Anmelden
       form.form(action=`/search/` method='POST')
         label.form__description(for='searchqueries') Type in a FULL racket brand/name
         .form__submit
           input.form__input(type='text', name="searchqueries", id='searchqueries', placeholder='Example: "Head"')
           button.form__button(type='submit') Find rackets!
 
-      if status === 404 || status === 500
-        +error(status)
-      if data === false
-        +zeroSearchResults
-      if login === true
-        +login
-      if register === true
-        +register
-      else if data
-        span.search-result-text Found #{data[0].length} rackets
-        .feed
-          each brand in data
-            each val, index in brand
-              +feedElement(brand, index)
+      block flashes
+        if locals.flashes.generalFlash
+          .flash-messages
+            each val, key in flashes.generalFlash
+              span.flash #{val}
+
+      
+      block dynamicContent
 

@@ -1,7 +1,12 @@
-mixin register(data = {}, i)
+extends index
+
+block dynamicContent
   .feed
     form.form.form__login(action=`/register` method='POST')
-      h1 Login
+      if locals.flashes.authError
+        .flash-messages
+          span.flash.flash__error #{flashes.authError[0]}
+      h1 Registrieren
       .form__login-container
         label.form__description.form__login-description(for='username') Username
         input.form__input.form__login-input(type='text', name="username", id='username', placeholder='Your username..')

@@ -17,7 +17,7 @@ exports.home = (req, res) => {
 exports.redirect = (req, res) => {
   let searchqueries = req.body.searchqueries;
   if (searchqueries === '') {
-    res.render('index', {data: false});
+    res.render('noSearchResults', {data: false});
   } else if (searchqueries.includes('**scrape**')) {
     res.redirect(`/scrape/${searchqueries}`);
   } else if (searchqueries) {
@@ -33,9 +33,9 @@ exports.displayScrapeData = async (req, res) => {
   
   const data = await displayData(searchqueries);
   if (data.length === 0) {
-    res.render('index', {data: false});
+    res.render('noSearchResults', {data: false});
   } else {
-    res.render('index', {data});
+    res.render('showRackets', {data});
   }
 };
 
@@ -50,30 +50,29 @@ exports.getScrapeData = async (req, res) => {
 
 exports.register = async (req, res) => {
   if (req.method === 'GET') {
-    res.render('index', {register: true});
+    res.render('register', {});
   } else if (req.method === 'POST') {
-    console.log(req.body.username, req.body.password, req.body.passwordConfirm);
+    // console.log(req.body.username, req.body.password, req.body.passwordConfirm);
     const isRegistered = await auth.registerUser(req.body.username, req.body.password, req.body.passwordConfirm);
     // console.log(isRegistered);
 
     if (isRegistered) {
-      req.flash('info', 'Hellooooooo');
-      req.flash('error', 'erroooooor');
       console.log('register successful');
-      res.render('index', {});
+      req.flash('authSuccess', 'Registrierung erfolgreich !');
+      res.redirect('/login');
     } else {
-      res.render('index', {login: true});
+      req.flash('authError', 'Registrierung fehlgeschlagen, überprüfe deine Daten !');
+      res.redirect('/register');
     }
-
   }
 };
 
 exports.login = async (req, res) => {
   if (req.method === 'GET') {
-    res.render('index', {login: true});
+    res.render('login', {});
   } else if (req.method === 'POST') {
     console.log(req.body.username, req.body.password);
 
-    // res.render('index', {login: true});
+    res.render('login', {});
   }
 };

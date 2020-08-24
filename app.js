@@ -40,6 +40,12 @@ app.use(session({
 }));
 app.use(flash());
 
+app.use((req, res, next) => {
+  res.locals.flashes = req.flash();
+  // req.locals = flash();
+  next();
+});
+
 // app.use(passport.initialize());
 // app.use(passport.session());
 
@@ -59,7 +65,7 @@ app.use(function (err, req, res, next) {
 app.use(function (req, res, next) {
   res.status(404);
   console.log(res.statusCode);
-  res.render('index', {status: 404});
+  res.render('error', {status: 404});
 });
 
 app.set('port', 7777);
