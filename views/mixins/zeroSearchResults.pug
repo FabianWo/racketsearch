@@ -1,0 +1,12 @@
+mixin zeroSearchResults
+  span.search-result-text Found 0 rackets
+  .feed
+    .feed__error
+      //- span.feed__error-message No rackets found !!
+      span.feed__error-message The search is case sensitive, which means you need to type in the brand correctly, snippets of the word don't work !
+      span.feed__error-message Here are some suggested searches:
+      span.feed__error-message
+        a.form__button.form__button--error(href="/search/babolat") Babolatrackets
+        a.form__button.form__button--error(href="/search/Wilson") Wilsonrackets
+        a.form__button.form__button--error(href="/search/Yonex") Yonexrackets
+        a.form__button.form__button--error(href="/search/Head") Headrackets

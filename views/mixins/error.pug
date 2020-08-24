@@ -1,0 +1,14 @@
+mixin error
+  .feed
+    .feed__error
+      h1 #{status}
+      if status === 404
+        span.feed__error-message Page not found / not available anymore !!
+        span.feed__error-message Maybe this page doesn't exist anymore due to changes on our site. 
+        span.feed__error-message It might also be due to an error in your link
+        span.feed__error-message Or... the page never existed in the first place :)
+      else if status === 500
+        span.feed__error-message Error loading the requested page !!
+        span.feed__error-message There was an internal issue loading this page.
+      span.feed__error-message
+        a.form__button.form__button--error(href="/") Back to Home

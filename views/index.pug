@@ -1,51 +1,46 @@
 doctype html
 include mixins/feedElement
+include mixins/zeroSearchResults
+include mixins/login
+include mixins/register
+include mixins/error
 
 html(lang='en')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet', type="text/css", href='/css/normalize.css')
     link(rel='stylesheet', type="text/css", href='/css/styles.css')
     script(defer src="/js/script.js")
-    title Document
+    title Find your favourite racket !
   body
     .container
       nav.nav
         ul.nav__list
           a.nav__link(href="/")
             li.nav__element Start
-          a.nav__link(href="")
+          a.nav__link(href="/")
             li.nav__element Rackets
-          a.nav__link(href="")
+          a.nav__link(href="/")
             li.nav__element Kontakt
-          a.nav__link(href="")
+          a.nav__link(href="/register")
+            li.nav__element Registrieren
+          a.nav__link(href="/login")
             li.nav__element Anmelden
       form.form(action=`/search/` method='POST')
-        label.form__description(for='searchqueries') Type in a racket brand/name
+        label.form__description(for='searchqueries') Type in a FULL racket brand/name
         .form__submit
-          input.form__input(type='text', name="searchqueries", id='searchqueries', placeholder='Search..')
+          input.form__input(type='text', name="searchqueries", id='searchqueries', placeholder='Example: "Head"')
           button.form__button(type='submit') Find rackets!
 
-      if status === 404
-        .feed
-          .feed__error
-            h1 404
-            span.feed__error-message Page not found / not available anymore !!
-            span.feed__error-message Maybe this page doesn't exist anymore due to changes on our site. 
-            span.feed__error-message It might also be due to an error in your link
-            span.feed__error-message Or... the page never existed in the first place :)
+      if status === 404 || status === 500
+        +error(status)
       if data === false
-        span.search-result-text Found 0 rackets
-        .feed
-          .feed__error
-            //- span.feed__error-message No rackets found !!
-            span.feed__error-message The search is case sensitive, which means you need to type in the brand correctly, snippets of the word don't work !
-            span.feed__error-message Here are some suggested searches:
-            span.feed__error-message
-              a.form__button.form__button--error(href="/search/babolat") Babolatrackets
-              a.form__button.form__button--error(href="/search/Wilson") Wilsonrackets
-              a.form__button.form__button--error(href="/search/Yonex") Yonexrackets
-              a.form__button.form__button--error(href="/search/Head") Headrackets
+        +zeroSearchResults
+      if login === true
+        +login
+      if register === true
+        +register
       else if data
         span.search-result-text Found #{data[0].length} rackets
         .feed

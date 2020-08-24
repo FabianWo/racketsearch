@@ -1,0 +1,11 @@
+mixin login(data = {}, i)
+  .feed
+    form.form.form__login(action=`/login` method='POST')
+      h1 Login
+      .form__login-container
+        label.form__description.form__login-description(for='username') Username
+        input.form__input.form__login-input(type='text', name="username", id='username', placeholder='Your username..')
+      .form__login-container
+        label.form__description.form__login-description(for='password') Password
+        input.form__input.form__login-input(type='text', name="password", id='password', placeholder='Your password..')
+      button.form__button.form__login-button(type='submit') Login

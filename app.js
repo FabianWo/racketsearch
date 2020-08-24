@@ -4,6 +4,10 @@ const puppeteer = require("puppeteer");
 const path = require("path");
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const flash = require('connect-flash');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+// const passport = require('passport');
 
 const app = express();
 
@@ -28,13 +32,28 @@ mongoose.connection.once('open', () => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(cookieParser());
+app.use(session({
+  resave: false,
+  saveUninitialized: false,
+  secret: 'seecrettstring'
+}));
+app.use(flash());
+
+// app.use(passport.initialize());
+// app.use(passport.session());
+
 app.use('/', routes);
 
 app.use(function (err, req, res, next) {
   if (err) {
-    res.status(500).send('Server Error - 500, message: ' + err);
+    res.status(500);  
+    console.log(res.statusCode);
+    console.log('\nerrorlog: \n\n' + err);
+    res.render('index', {status: 500});
+  } else {
+    next();
   }
-  next();
 });
 
 app.use(function (req, res, next) {

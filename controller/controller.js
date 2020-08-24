@@ -1,7 +1,13 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+
 const startScraper = require('../models/ScraperSetup');
 const displayData = require('../models/DisplayData');
-const mongoose = require('mongoose');
+const auth = require('../models/Users');
+// const passport = require('passport');
+// const AuthStrategy = require('../models/Auth').LocalAuthStrategy;
+// const execAuth = require('../models/Auth').ExecuteAuth;
 
 exports.home = (req, res) => {
   res.render('index');
@@ -40,4 +46,34 @@ exports.getScrapeData = async (req, res) => {
   console.log("Scraping data for " + searchqueries);
   const data = await startScraper(searchqueries);
   res.redirect(`/search/${searchqueries}`);
+};
+
+exports.register = async (req, res) => {
+  if (req.method === 'GET') {
+    res.render('index', {register: true});
+  } else if (req.method === 'POST') {
+    console.log(req.body.username, req.body.password, req.body.passwordConfirm);
+    const isRegistered = await auth.registerUser(req.body.username, req.body.password, req.body.passwordConfirm);
+    // console.log(isRegistered);
+
+    if (isRegistered) {
+      req.flash('info', 'Hellooooooo');
+      req.flash('error', 'erroooooor');
+      console.log('register successful');
+      res.render('index', {});
+    } else {
+      res.render('index', {login: true});
+    }
+
+  }
+};
+
+exports.login = async (req, res) => {
+  if (req.method === 'GET') {
+    res.render('index', {login: true});
+  } else if (req.method === 'POST') {
+    console.log(req.body.username, req.body.password);
+
+    // res.render('index', {login: true});
+  }
 };
