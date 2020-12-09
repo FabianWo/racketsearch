@@ -9,11 +9,15 @@ block dynamicContent
       h1 Registrieren
       .form__login-container
         label.form__description.form__login-description(for='username') Username
-        input.form__input.form__login-input(type='text', name="username", id='username', placeholder='Your username..')
+        input.form__input.form__login-input(type='text', name="username", id='username', placeholder='Your username..', value=`${formData.username || ''}`)
+        if registerErrors.username
+          span.flash-input.flash__error #{registerErrors.username}
       .form__login-container
         label.form__description.form__login-description(for='password') Password
-        input.form__input.form__login-input(type='text', name="password", id='password', placeholder='Your password..')
+        input.form__input.form__login-input(type='password', name="password", id='password', placeholder='Your password..', value=`${formData.password || ''}`)
+        if registerErrors.password
+          span.flash-input.flash__error #{registerErrors.password}
       .form__login-container
         label.form__description.form__login-description(for='passwordConfirm') Confirm Password
-        input.form__input.form__login-input(type='text', name="passwordConfirm", id='passwordConfirm', placeholder='Confirm password..')
+        input.form__input.form__login-input(type='password', name="passwordConfirm", id='passwordConfirm', placeholder='Confirm password..', value=`${formData.passwordConfirm || ''}`)
       button.form__button.form__login-button(type='submit') Sign up!

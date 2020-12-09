@@ -7,17 +7,20 @@ const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-// const passport = require('passport');
+const passport = require('passport');
 
+// start app
 const app = express();
 
+// set view engine/folder
 app.set("views", path.join(__dirname, 'views'));
 app.set("view engine", "pug");
 
+// set public files folder/private variables
 app.use(express.static(path.join(__dirname, 'public')));
-
 require('dotenv').config({path: 'variables.env'});
 
+// connect mongodb with mongoose
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.CONNECTION_STRING, {
   useNewUrlParser: true,
@@ -29,39 +32,63 @@ mongoose.connection.once('open', () => {
   console.log('Mongo connection successful!');
 });
 
+// disable login cache for full logouts
+app.use(function(req, res, next) {
+  if (!req.user)
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  next();
+});
+
+// setup bodyparser, cookieparser, express.session
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(cookieParser());
 app.use(session({
   resave: false,
   saveUninitialized: false,
   secret: 'seecrettstring'
 }));
-app.use(flash());
 
+// setup passport strategy and helpers
+const initializePassport = require('./models/localAuth').initializePassport;
+initializePassport(passport);
+app.use(passport.initialize());
+app.use(passport.session());
+
+// setup flash-messages
+app.use(flash());
 app.use((req, res, next) => {
   res.locals.flashes = req.flash();
-  // req.locals = flash();
   next();
 });
 
-// app.use(passport.initialize());
-// app.use(passport.session());
 
+
+// handle routes
 app.use('/', routes);
 
+// app.post('/login', (req, res, next) => {
+//   passport.authenticate('local',{
+//     successRedirect: '/',
+//     failureRedirect: '/fail'
+//   }, (req, res) => {
+//     res.redirect('/');
+//   });
+// });
+
+// handle 500 errors
 app.use(function (err, req, res, next) {
   if (err) {
-    res.status(500);  
+    res.status(500);
     console.log(res.statusCode);
-    console.log('\nerrorlog: \n\n' + err);
+    console.log('\nerrorlog: \n\n' + err + '\n\n');
     res.render('index', {status: 500});
   } else {
     next();
   }
 });
 
+// handle 404 errors
 app.use(function (req, res, next) {
   res.status(404);
   console.log(res.statusCode);

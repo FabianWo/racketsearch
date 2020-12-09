@@ -51,6 +51,7 @@
 
 (() => {
   const navElements = [...document.querySelectorAll('.nav__element')];
+  const flashMessages = document.querySelector('.flash-messages');
   
   setTimeout(() => {
     if (document.URL.includes('register')) {
@@ -61,12 +62,15 @@
     [sessionStorage.registerScrollY,
     sessionStorage.loginScrollY] = [0,0];
   }, 30);
+  if (flashMessages) {
+    flashMessages.style.opacity = '0%';
+    flashMessages.style.opacity = '100%';
+    setTimeout(() => {
+      console.log(flashMessages);
+      flashMessages.style.opacity = '0%';
+    }, 10000);
 
-  document.querySelector('.flash-messages').style.opacity = '0%';
-  document.querySelector('.flash-messages').style.opacity = '100%';
-  setTimeout(() => {
-    document.querySelector('.flash-messages').style.opacity = '0%';
-  }, 6000);
+  }
   
   window.addEventListener('beforeunload', () => {
     if (document.URL.includes('register')) {
