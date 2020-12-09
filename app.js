@@ -18,7 +18,8 @@ app.set("view engine", "pug");
 
 // set public files folder/private variables
 app.use(express.static(path.join(__dirname, 'public')));
-require('dotenv').config({path: 'variables.env'});
+require('dotenv').config({path: path.join(__dirname, 'variables.env')});
+console.log(path.join(__dirname, 'variables.env'));
 
 // connect mongodb with mongoose
 mongoose.Promise = global.Promise;
