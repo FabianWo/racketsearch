@@ -4,8 +4,8 @@ const controller = require("../controller/controller");
 const checkAuthenticated = require('../models/HandleUsers').isAuthenticated.checkAuth;
 
 // regular routes
-router.get("/", controller.home);
-router.post("/", controller.home);
+router.get('/', controller.home);
+router.post('/', controller.home);
 router.get('/search/', controller.redirect);
 router.post('/search/', controller.redirect);
 router.get('/favicon.ico', (req, res) => res.status(200));
