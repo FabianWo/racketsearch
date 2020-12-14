@@ -64,7 +64,7 @@ app.use((req, res, next) => {
 });
 
 // handle routes
-app.use('/', routes);
+app.use('/projects/racketsearch/', routes);
 
 // app.post('/login', (req, res, next) => {
 //   passport.authenticate('local',{
@@ -76,7 +76,7 @@ app.use('/', routes);
 // });
 
 // handle 500 errors
-app.use(function (err, req, res, next) {
+app.use('/projects/racketsearch/', function (err, req, res, next) {
   if (err) {
     res.status(500);
     console.log(res.statusCode);
@@ -88,7 +88,7 @@ app.use(function (err, req, res, next) {
 });
 
 // handle 404 errors
-app.use(function (req, res, next) {
+app.use('/projects/racketsearch/', function (req, res, next) {
   res.status(404);
   console.log(res.statusCode);
   res.render('error', {status: 404});
