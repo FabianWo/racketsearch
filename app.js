@@ -14,12 +14,11 @@ const passport = require('passport');
 const app = express();
 
 // set view engine/folder
-app.set("views", path.join(__dirname, 'views'));
+app.set("views", (__dirname + '/views'));
 app.set("view engine", "pug");
 
 // set public files folder/private variables
-app.use(express.static(path.join(__dirname, 'public')));
-console.log(path.join(__dirname, 'public'));
+app.use(express.static(__dirname + '/public'));
 require('dotenv').config({path: path.join(__dirname, 'variables.env')});
 
 // connect mongodb with mongoose
