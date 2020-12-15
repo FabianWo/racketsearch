@@ -13,15 +13,15 @@ html(lang='en')
     .container
       nav.nav
         ul.nav__list
-          a.nav__link#noTransitionsOnLoad(href="/")
+          a.nav__link#noTransitionsOnLoad(href=`${dynamicUrl}`)
             li.nav__element#noTransitionsOnLoad Start
-          a.nav__link#noTransitionsOnLoad(href="/")
+          a.nav__link#noTransitionsOnLoad(href=`${dynamicUrl}`)
             li.nav__element#noTransitionsOnLoad Rackets
-          a.nav__link#noTransitionsOnLoad(href="/")
+          a.nav__link#noTransitionsOnLoad(href=`${dynamicUrl}`)
             li.nav__element#noTransitionsOnLoad Kontakt
-          a.nav__link#noTransitionsOnLoad(href="/register")
+          a.nav__link#noTransitionsOnLoad(href=`${dynamicUrl}register`)
             li.nav__element#noTransitionsOnLoad Registrieren
-          a.nav__link#noTransitionsOnLoad(href="/login")
+          a.nav__link#noTransitionsOnLoad(href=`${dynamicUrl}login`)
             li.nav__element#noTransitionsOnLoad Anmelden
       form.form(action=`/search/` method='POST')
         label.form__description(for='searchqueries') Type in a FULL racket brand/name

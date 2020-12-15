@@ -2,24 +2,25 @@
 // const mongoose = require('mongoose');
 // const bcrypt = require('bcrypt');
 const passport = require('passport');
-
 const startScraper = require('../models/ScraperSetup');
 const displayData = require('../models/DisplayData');
 const handleUsers = require('../models/HandleUsers');
+const dynamicUrl = require('../helpers/dynamicRoutes').dynamicURL;
 
 exports.home = (req, res) => {
-  res.render('index');
+  console.log(dynamicUrl);
+  res.render('index', { dynamicUrl: dynamicUrl });
   console.log("CONNECTED");
 };
 
 exports.redirect = (req, res) => {
   let searchqueries = req.body.searchqueries;
   if (searchqueries === '') {
-    res.render('noSearchResults', {data: false});
+    res.render('noSearchResults', {data: false, dynamicUrl: dynamicUrl});
   } else if (searchqueries.includes('**scrape**')) {
-    res.redirect(`/scrape/${searchqueries}`);
+    res.redirect(`${dynamicUrl}scrape/${searchqueries}`);
   } else if (searchqueries) {
-    res.redirect(`/search/${searchqueries}`);
+    res.redirect(`${dynamicUrl}search/${searchqueries}`);
   }
   // searchqueries filtern, keine sonderzeichen erlauben
 };
@@ -31,9 +32,9 @@ exports.displayScrapeData = async (req, res) => {
   
   const data = await displayData(searchqueries);
   if (data.length === 0) {
-    res.render('noSearchResults', {data: false});
+    res.render('noSearchResults', {data: false, dynamicUrl: dynamicUrl});
   } else {
-    res.render('showRackets', {data});
+    res.render('showRackets', {data, dynamicUrl: dynamicUrl});
   }
 };
 
@@ -43,14 +44,15 @@ exports.getScrapeData = async (req, res) => {
 
   console.log("Scraping data for " + searchqueries);
   const data = await startScraper(searchqueries);
-  res.redirect(`/search/${searchqueries}`);
+  res.redirect(`${dynamicUrl}search/${searchqueries}`);
 };
 
 exports.register = async (req, res) => {
   if (req.method === 'GET') {
     res.render('register', {
       registerErrors: false,
-      formData: false
+      formData: false,
+      dynamicUrl: dynamicUrl
     });
 
   } else if (req.method === 'POST') {
@@ -60,13 +62,14 @@ exports.register = async (req, res) => {
 
     if (isRegistered.status) {
       req.flash('authSuccess', 'Registrierung erfolgreich !');
-      res.redirect('/login');
+      res.redirect(`${dynamicUrl}login`);
 
     } else if (isRegistered.registerErrors) {
       console.log(isRegistered);
       res.render('register', {
         registerErrors: isRegistered.registerErrors,
-        formData: formData
+        formData: formData,
+        dynamicUrl: dynamicUrl
       });
       // isRegistered.error();
       // res.redirect('/register');
@@ -77,7 +80,7 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res, next) => {
   if (req.method === 'GET') {
-    res.render('login', {});
+    res.render('login', {dynamicUrl: dynamicUrl});
 
   } else if (req.method === 'POST') {
     console.log(JSON.stringify(req.body, 2));
@@ -104,9 +107,12 @@ exports.logout = (req, res) => {
     req.logout();
     req.flash('authSuccess', 'Logout Erfolgreich !');
   }
-  res.redirect('/login');
+  res.redirect(`${dynamicUrl}login`);
 };
 
 exports.dashboard = (req, res) => {
-  res.render('dashboard', {user: req.user});
+  res.render('dashboard', {
+    user: req.user,
+    dynamicUrl: dynamicUrl
+  });
 };
