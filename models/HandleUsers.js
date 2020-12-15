@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 const passport = require('passport');
+const dynamicUrl =require('../helpers/dynamicRoutes').dynamicURL;
 
 const UserSchema = new Schema({
   username: {type: String, required: true},
