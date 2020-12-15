@@ -19,7 +19,7 @@ app.set("views", (__dirname + '/views'));
 app.set("view engine", "pug");
 
 // set public files folder/private variables
-app.use(express.static(__dirname + '/public'));
+app.use(dynamicUrl, express.static(__dirname + '/public'));
 require('dotenv').config({path: path.join(__dirname, 'variables.env')});
 
 // connect mongodb with mongoose
