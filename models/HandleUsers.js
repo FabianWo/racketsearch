@@ -53,11 +53,11 @@ exports.loginUser = (req, res, next) => {
       req.login(user, (err) => {
         if (err) return err;
         req.flash('authSuccess', 'Login erfolgreich !');
-        res.redirect('/dashboard');
+        res.redirect(`${dynamicUrl}dashboard`);
       });
     } else {
       req.flash('authError', `${info.message}`);
-      res.redirect('/login');
+      res.redirect(`${dynamicUrl}login`);
     }
     console.log(user);
     console.log('info:\n' +info);
@@ -71,6 +71,6 @@ exports.isAuthenticated = {
       return next();
     }
     req.flash('authError', 'Zugang verweigert, bitte einloggen !');
-    res.redirect('/login');
+    res.redirect(`${dynamicUrl}login`);
   }
 };
