@@ -5,9 +5,9 @@ html(lang='en')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(rel='stylesheet', type="text/css", href='/css/normalize.css')
-    link(rel='stylesheet', type="text/css", href='/css/styles.css')
-    script(defer src="/js/script.js")
+    link(rel='stylesheet', type="text/css", href=`${dynamicUrl}css/normalize.css`)
+    link(rel='stylesheet', type="text/css", href=`${dynamicUrl}css/styles.css`)
+    script(defer src=`${dynamicUrl}js/script.js`)
     title Find your favourite racket !
   body
     .container
@@ -23,7 +23,7 @@ html(lang='en')
             li.nav__element#noTransitionsOnLoad Registrieren
           a.nav__link#noTransitionsOnLoad(href=`${dynamicUrl}login`)
             li.nav__element#noTransitionsOnLoad Anmelden
-      form.form(action=`/search/` method='POST')
+      form.form(action=`${dynamicUrl}search/` method='POST')
         label.form__description(for='searchqueries') Type in a FULL racket brand/name
         .form__submit
           input.form__input(type='text', name="searchqueries", id='searchqueries', placeholder='Example: "Head"')

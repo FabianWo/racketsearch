@@ -2,15 +2,10 @@
 // const express = require("express");
 // const path = require('path');
 const normalizePath = require('normalize-path');
+const regex = RegExp('.com');
 
-console.log(__dirname.search('/.com/g'));
-
-if ( __dirname.search('/.com/g') !== -1 ) {
-  exports.dynamicURL = normalizePath(__dirname.split('.com')[1].split('helpers')[0]);
-  console.log('yes   ' + this.dynamicURL);
+if ( regex.test(__dirname) ) {
+  exports.dynamicURL = normalizePath(__dirname.split('.com')[1].split('helpers')[0], false);
 } else {
   exports.dynamicURL = '/';
-  console.log('no');
 }
-
-console.log(this.dynamicURL);

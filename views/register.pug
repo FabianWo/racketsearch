@@ -2,7 +2,7 @@ extends index
 
 block dynamicContent
   .feed
-    form.form.form__login(action=`/register` method='POST')
+    form.form.form__login(action=`${dynamicUrl}register` method='POST')
       if locals.flashes.authError
         .flash-messages
           span.flash.flash__error #{flashes.authError[0]}
