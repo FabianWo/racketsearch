@@ -12,7 +12,7 @@ block dynamicContent
       else if locals.flashes.authError
         .flash-messages
           span.flash.flash__error #{flashes.authError[0]}
-      h1 Login
+      h1.h1-heading Login
       .form__login-container
         label.form__description.form__login-description(for='username') Username
         input.form__input.form__login-input(type='text', name="username", id='username', placeholder='Your username..')
