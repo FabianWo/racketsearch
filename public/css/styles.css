@@ -15,6 +15,7 @@
   --boxshadow-card: 0 0 2px 1px rgba(164, 188, 219, 0.233); 
   font-family: "Montserrat", sans-serif;
   letter-spacing: -0.02em;
+  line-height: 1.6em;
 }
 
 * {
@@ -22,9 +23,6 @@
   padding:  0;
   border: none;
   text-decoration: none;
-  /* filter: invert(0.2); */
-  /* letter-spacing: 0.2px; */
-  line-height: 1.5rem !important;
   box-sizing: border-box;
 }
 
@@ -130,12 +128,10 @@ body {
 }
 
 .nav__element {
-  padding: 1.7rem 1.4rem;
+  padding: 2rem 1.4rem;
   list-style-type: none;
   color: white;
-  transition: padding 0.3s;
-  /* min-width: 60px; */
-  /* text-align: center; */
+  transition: padding 0.25s;
 }
 
 .nav__element:hover {
@@ -154,7 +150,7 @@ body {
   width: max(280px, 100%);
   max-width: 550px;
   margin-top: 10rem;
-  padding: clamp(2rem, 4vw, 4rem);
+  padding: 4rem clamp(1rem, 7vw, 4rem);
   border-radius: 8px;
   background-color: var(--color-darkblue);
   box-shadow: var(--boxshadow-light);
@@ -166,27 +162,29 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 .form__input {
   border-radius: 4px;
-  padding: 0.45rem 0.75rem 0.5rem;
+  padding: 0.7rem 0.75rem 0.6rem;
   font-size: 1rem;
   box-shadow: inset 0 0 10px 2px rgb(197, 197, 197);
+  flex: 1 0 auto;
 }
 
 .form__button {
   background-color: rgb(240, 240, 240);
   color: black;
   border-radius: 4px;
-  padding: 0.4rem 0.75rem 0.45rem;
+  padding: 0.6rem 0.8rem 0.6rem;
   font-size: 1.1rem;
   cursor: pointer;
   white-space: nowrap;
   letter-spacing: -0.01em;
   font-weight: 700;
   transition: box-shadow 0.3s;
+  flex: 1 0 auto;
 }
 
 .form__button:hover {
@@ -384,10 +382,9 @@ body {
 /* error feed */
 
 .feed__error {
-  margin: 2rem 0;
+  margin: 2rem auto;
   color: white;
   min-width: 50%;
-  justify-self: center;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -413,7 +410,7 @@ body {
 
 }
 
-@media (max-width: 800px) {
+@media (max-width: 500px) {
 
   .feed-element {
     max-width: 100%;
