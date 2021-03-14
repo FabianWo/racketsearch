@@ -1,6 +1,6 @@
-// helper variable for dynamic path/routing
-// const express = require("express");
-// const path = require('path');
+// helper function for dynamic path/routing on web server
+// checks for a path after the baseurl and return it
+
 const normalizePath = require('normalize-path');
 const regex = RegExp('.com');
 

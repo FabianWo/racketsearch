@@ -25,10 +25,10 @@ const racketSchema = new Schema({
   veraltet: Boolean, default: false
 });
 
-// clear cache and get correct name for collection
+// clear require cache and get correct name for collection
 const exportModel = (modelBrandName) => {
-  delete require.cache[require.resolve(`${modelBrandName}`).brandName];
   brandname = require(`${modelBrandName}`).brandName;
+  delete require.cache[require.resolve(`${modelBrandName}`).brandName];
   return mongoose.model(brandname, racketSchema, brandname.toLowerCase());
 };
 

@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../controller/controller");
 const checkAuthenticated = require('../models/HandleUsers').isAuthenticated.checkAuth;
-const dynamicUrl = require('../helpers/dynamicRoutes').dynamicURL;
 
 // regular routes
 router.get('/', controller.home);
@@ -12,6 +11,8 @@ router.post('/search/', controller.redirect);
 router.get('/favicon.ico', (req, res) => res.status(200));
 router.get('/search/:searchqueries', controller.displayScrapeData);
 router.get('/scrape/:searchqueries', controller.getScrapeData);
+router.get('/rackets', controller.showAllRackets);
+router.get('/rackets/:racketName', controller.showSingleRacket);
 router.get('/dashboard', checkAuthenticated, controller.dashboard );
 
 // authentication / user routes

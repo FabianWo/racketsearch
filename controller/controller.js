@@ -1,18 +1,17 @@
-// const express = require('express');
-// const mongoose = require('mongoose');
-// const bcrypt = require('bcrypt');
 const passport = require('passport');
 const startScraper = require('../models/ScraperSetup');
 const displayData = require('../models/DisplayData');
 const handleUsers = require('../models/HandleUsers');
 const dynamicUrl = require('../helpers/dynamicRoutes').dynamicURL;
 
+// serve the home page
 exports.home = (req, res) => {
   console.log(dynamicUrl);
   res.render('index', { dynamicUrl: dynamicUrl });
   console.log("CONNECTED");
 };
 
+// check for search queries and redirect
 exports.redirect = (req, res) => {
   let searchqueries = req.body.searchqueries;
   if (searchqueries === '') {
@@ -25,19 +24,22 @@ exports.redirect = (req, res) => {
   // searchqueries filtern, keine sonderzeichen erlauben
 };
 
+// display search results
 exports.displayScrapeData = async (req, res) => {
   let searchqueries = req.params.searchqueries.split(' ')
     .filter(el => el !== '**scrape**').join(' ');
   console.log('running displayScrapeData');
   
-  const data = await displayData(searchqueries);
+  const data = await displayData.displayRackets(searchqueries);
   if (data.length === 0) {
     res.render('noSearchResults', {data: false, dynamicUrl: dynamicUrl});
   } else {
-    res.render('showRackets', {data, dynamicUrl: dynamicUrl});
+    const totalItems = data.reduce( (acc,curr) => acc + curr.length, 0);
+    res.render('showRackets', {data, dynamicUrl: dynamicUrl, totalItems});
   }
 };
 
+// start web scraper, update data, and redirect to show the results
 exports.getScrapeData = async (req, res) => {
   let searchqueries = req.params.searchqueries.split(' ')
     .filter(el => el !== '**scrape**');
@@ -47,6 +49,20 @@ exports.getScrapeData = async (req, res) => {
   res.redirect(`${dynamicUrl}search/${searchqueries}`);
 };
 
+// show all rackets
+exports.showAllRackets = async (req, res) => {
+  const data = await displayData.displayRackets('all');
+  const totalItems = data.reduce( (acc,curr) => acc + curr.length, 0);
+  res.render('showRackets', {data, dynamicUrl: dynamicUrl, totalItems});
+};
+
+// show single rackets
+exports.showSingleRacket = async (req, res) => {
+  const data = await displayData.displaySingleRacket(req.params.racketName);
+  res.render('showSingleRacket', {data, dynamicUrl: dynamicUrl});
+};
+
+
 exports.register = async (req, res) => {
   if (req.method === 'GET') {
     res.render('register', {
@@ -54,13 +70,13 @@ exports.register = async (req, res) => {
       formData: false,
       dynamicUrl: dynamicUrl
     });
-
+    
   } else if (req.method === 'POST') {
     const isRegistered = await handleUsers.registerUser(req, req.body.username, req.body.password, req.body.passwordConfirm);
     const formData = {...req.body};
     console.log(formData);
 
-    if (isRegistered.status) {
+    if (isRegistered.status === true) {
       req.flash('authSuccess', 'Registrierung erfolgreich !');
       res.redirect(`${dynamicUrl}login`);
 
@@ -71,9 +87,6 @@ exports.register = async (req, res) => {
         formData: formData,
         dynamicUrl: dynamicUrl
       });
-      // isRegistered.error();
-      // res.redirect('/register');
-
     }
   }
 };
@@ -81,23 +94,9 @@ exports.register = async (req, res) => {
 exports.login = async (req, res, next) => {
   if (req.method === 'GET') {
     res.render('login', {dynamicUrl: dynamicUrl});
-
   } else if (req.method === 'POST') {
     console.log(JSON.stringify(req.body, 2));
     handleUsers.loginUser(req, res, next);
-    // passport.authenticate('local', (err, user, info) => {
-    //   if (err) console.error(err);
-    //   if (user) {
-    //     req.flash('authSuccess', 'Login erfolgreich !');
-    //     res.redirect('/login');
-    //   } else {
-    //     req.flash('authError', `${info.message}`);
-    //     res.redirect('/login');
-    //   }
-    //   console.log(user);
-    //   console.log(info);
-    // })(req, res, next);
-    
   }
 };
 

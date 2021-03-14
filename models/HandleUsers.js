@@ -43,7 +43,7 @@ exports.registerUser = async (req, username, password, passwordConfirm, eMail) =
   if (registerErrors) {
     return {status: false, registerErrors};
   } else {
-    return { status: true};
+    return {status: true};
   }
 };
 

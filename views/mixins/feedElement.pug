@@ -1,7 +1,7 @@
 mixin feedElement(data = {}, i)
-  .feed-element
+  a.feed-element(href=`${dynamicUrl}rackets/${data[i].racketName}`)
     h3.racketName= data[i].racketName
-    .feed-element__content 
+    .feed-element__content
       img.racketPicture(src=`${data[i].racketPictureLink}`)
       .specsContainer
         if data[i].racketSpecs === "Not available"

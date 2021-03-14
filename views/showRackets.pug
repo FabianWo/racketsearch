@@ -4,7 +4,7 @@ include mixins/feedElement
 
 block dynamicContent
   if data
-    span.search-result-text Found #{data[0].length} rackets
+    span.search-result-text Found #{totalItems} rackets
     .feed
       each brand in data
         each val, index in brand

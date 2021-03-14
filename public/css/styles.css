@@ -103,13 +103,13 @@ body {
 }
 
 .nav__list {
-  position: absolute;
+  position: relative;
   width: 100%;
   display: flex;
 }
 
 .nav__link {
-  flex: 1 0 auto;
+  flex: 1 0 90px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -128,10 +128,11 @@ body {
 }
 
 .nav__element {
-  padding: 2rem 1.4rem;
+  padding: 1.8rem 1.4rem;
   list-style-type: none;
   color: white;
   transition: padding 0.25s;
+  font-size: 1.125rem;
 }
 
 .nav__element:hover {
@@ -149,7 +150,7 @@ body {
   flex-direction: column;
   width: max(280px, 100%);
   max-width: 550px;
-  margin-top: 10rem;
+  margin-top: 8rem;
   padding: 4rem clamp(1rem, 7vw, 4rem);
   border-radius: 8px;
   background-color: var(--color-darkblue);
@@ -261,14 +262,13 @@ body {
   flex-wrap: wrap;
   width: max(300px, 100%);
   max-width: 1600px;
-  gap: 2rem;
+  gap: 1.5rem;
   margin: 6rem 0 3rem;
-  padding: 2.5rem clamp(0.5rem, 2vw, 2.5rem);
+  padding: 1.5rem;
   background-color: var(--color-darkblue);
   border-radius: 8px;
   box-shadow: var(--boxshadow-light);
 }
-
 
 .feed-element {
   position: relative;
@@ -302,6 +302,7 @@ body {
   margin: 1.5rem 0 2rem;
   letter-spacing: 0.4px;
   font-size: 1.5rem;
+  line-height: 2.1rem;
 }
 
 .racketPicture {
@@ -313,6 +314,7 @@ body {
 }
 
 .specsContainer {
+  max-width: 100%;
   grid-area: specs;
   display: flex;
   flex-direction: column;
@@ -322,6 +324,7 @@ body {
 }
 
 .specText {
+  max-width: 100%;
   position: relative;
   display: flex;
   padding: 0.33rem 0;
@@ -406,11 +409,27 @@ body {
 
   .nav__list {
     flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .nav__link {
+    box-shadow: none;
+    margin: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0; 
+  }
+
+  .form {
+    margin-top: 4rem;
   }
 
 }
 
 @media (max-width: 500px) {
+
+  .container {
+    width: 100%;
+  }
 
   .feed-element {
     max-width: 100%;

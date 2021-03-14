@@ -7,30 +7,30 @@ const scrape = async (searchqueries) => {
   // ---------------- Scraper/Puppeteer Setup ------------------
   // searchqueries = searchqueries.split(" ");
   // .filter((query) => query !== '**scrape**');
-  console.log(searchqueries);
+  brandsToSearch = ['wilson', 'babolat', 'yonex', 'head', 'dunlop', 'prokennex', 'gamma', 'tecnifibre', 'prince']
+    .filter((brand) => {
+      return searchqueries.includes(brand);
+    });
 
-  const browser = await scraper.launch({headless: false});
+  const browser = await scraper.launch({headless: true});
   const page = await browser.newPage();
   const url = "https://www.tennis-warehouse.com";
   await page.goto(url);
 
   // pull out brand names/links to sites
-  const [brandListOneHandle] = await page.$x('//*[@id="lnav"]/div[4]/div[1]/ul');
+  const [brandListOneHandle] = await page.$x('//*[@id="lnav"]/div[6]/div[1]/ul');
   const brandListOne = await brandListOneHandle.$$eval('a', (el) => el.map((el) => el.getAttribute('href')));
-  const [brandListTwoHandle] = await page.$x('//*[@id="lnav"]/div[4]/div[2]/ul');
+  const [brandListTwoHandle] = await page.$x('//*[@id="lnav"]/div[6]/div[2]/ul');
   const brandListTwo = await brandListTwoHandle.$$eval('a', (el) => el.map((el) => el.getAttribute('href')));
 
   // filter brands with searchqueries
   const brandLinksFiltered = [...brandListOne, ...brandListTwo]
   .filter((brand) => {
-    return searchqueries.some((query) => brand.toLowerCase().includes(query));
+    return brandsToSearch.some((query) => brand.toLowerCase().includes(query));
   });
-  console.log(brandLinksFiltered);
+
 
   // ---------------------Scrape Loop---------------------------
-
-  // const data = [];
-
   for await(const brandLink of brandLinksFiltered) {
     console.log('going to ' + `${url}${brandLink}`);
     await page.goto(`${url}${brandLink}`);
@@ -50,6 +50,8 @@ const scrape = async (searchqueries) => {
     
     // Scrape racketbrand
     const racketData = await DataFetcher.scrapeData(browser, page, allRacketLinks, brandName);
+
+    // console.log(racketData);
 
     // reset brandname for schema 
     module.exports.brandName = undefined;

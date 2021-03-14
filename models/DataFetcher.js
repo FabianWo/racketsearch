@@ -15,7 +15,7 @@ exports.scrapeData = async (browser, page, allRacketLinks, brandName) => {
   updateRacketList.forEach( async (racket) => {
     if (!allRacketNames.includes(racket.racketName)) {
       console.log('update ' + racket.racketName);
-      await RacketModel.updateOne({'racketName': racket.racketName}, {'veraltet': true});
+      const n = await RacketModel.findOneAndUpdate({'racketName': racket.racketName}, {'veraltet': true}, {new: true});
     }
   });  
   
@@ -23,7 +23,7 @@ exports.scrapeData = async (browser, page, allRacketLinks, brandName) => {
 
   // helpers for loop and final data
   // const allRacketDataByBrand = [];
-  let index = 0;
+  let forIndex = 0;
 
   // single Racket scrape, and data storage
   for await (const link of allRacketLinks) {
@@ -32,7 +32,7 @@ exports.scrapeData = async (browser, page, allRacketLinks, brandName) => {
     // -----------GET DATA------------
 
     // get racketname from given List
-    const racketName = allRacketNames[index];      
+    const racketName = allRacketNames[forIndex];      
     
     // pull out link to picture 
     const racketPictureLink = await page.$eval('.mainimage', (img) => img.getAttribute('src'));
@@ -42,31 +42,36 @@ exports.scrapeData = async (browser, page, allRacketLinks, brandName) => {
     racketSpecs = await page.$eval('.rac_specs tbody', el => {
       const finalSpecs = {};
       const specTableElements = [...el.querySelectorAll('.SpecsLt, .SpecsDk')];
+      
       specTableElements.forEach((el) => {
         const txtSplit = el.innerText.split('\n');
         finalSpecs[txtSplit[0]] = txtSplit[1];
       });
       return finalSpecs;
     }).catch( err => console.log(err));
-
+    
     if (racketSpecs === undefined) {
       racketSpecs = 'no specs available';
+    } else {
+      if (racketSpecs['Racquet Colors:']) {
+        racketSpecs['Racquet Colors:'] = racketSpecs['Racquet Colors:']
+        .replace(/\//g, ' / ');
+      }
     }
-    index++;
+    forIndex++;
 
     // -----------STORE DATA------------
 
     const RacketModel = require('./DbSchema')('./ScraperSetup');
     const saveRacket = new RacketModel({racketName, racketPictureLink, racketSpecs});
 
-    // dann für jeden racket findOneAndUpdate(), wenn nichts gefunden await save
-    
+    // dann für jeden racket findOneAndUpdate(), wenn nichts gefunden await save    
     RacketModel.findOneAndUpdate({racketName: `${saveRacket.racketName}`},
     {
       'racketPictureLink': saveRacket.racketPictureLink,
       'racketSpecs': saveRacket.racketSpecs
     },
-    {new: true},
+    {overwrite: true},
     async (err) => {
       if (err) {
         console.error(err);
@@ -78,6 +83,8 @@ exports.scrapeData = async (browser, page, allRacketLinks, brandName) => {
       }
     });
   }
+
+  return 'finished';
 
   // console.log(`allracketnames 
   // ${JSON.stringify(allRacketDataByBrand, null, '  ')}
